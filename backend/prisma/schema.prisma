@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client" 
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Blog {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  isPublic   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Foreign Keys
+  authorId   Int
+  categoryId Int
+
+  // Relations
+  author     User      @relation(fields: [authorId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id])
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String
+  email     String  @unique
+  password  String
+
+  // One user can have many blogs
+  blogs     Blog[]
+}
+
+model Category {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+
+  // One category can have many blogs
+  blogs Blog[]
+}
