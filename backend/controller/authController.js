@@ -1,98 +1,104 @@
-import prisma from "../config/db.js";
+import prisma from "../config/db.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const signUpUser = async (req, res) => {
+
     try {
-        const { name, password, email } = req.body;
+        const { name, email, password } = req.body;
 
         if (!name || !email || !password) {
-            return res.status(400).json({ error: "Name, email, and password are required." });
+            return res.status(401).json({
+                message: "Required information missing"
+            })
         }
 
-        const existingUser = await prisma.user.findUnique({
-            where: { email },
-        });
-
-        if (existingUser) {
-            return res.status(409).json({ error: "Email is already registered." });
+        if (await prisma.user.findUnique({ where: { email } })) {
+            return res.status(400).json({
+                message: "User already exists,Please Login!!"
+            })
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashPassword = await bcrypt.hash(password, 10);
 
-        const user = await prisma.user.create({
+        const newUser = await prisma.user.create({
             data: {
-                name,
                 email,
-                password: hashedPassword,
-            },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-            },
-        });
+                name,
+                password: hashPassword
+            }
+
+        })
 
         const token = jwt.sign(
             {
-                userId: user.id,
-                email: user.email
+                id: newUser.id,
             },
-            process.env.JWT_SECRET,
-            { expiresIn: "1d" }
-        );
+            process.env.JWT_KEY,
+            {
+                expiresIn: "1d"
+            }
+        )
 
-        res.status(201).json({ user, token });
-    } catch (error) {
-        console.error("Signup error:", error);
-        res.status(500).json({ error: "Unable to create user." });
+        return res.status(201).json({
+            message: "User Registered Successfully",
+            token
+        })
     }
-};
+    catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            message: "Some Unexpected error Occurred"
+        })
+    }
+}
 
 export const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-
     try {
+        const { email, password } = req.body;
+
         if (!email || !password) {
-            return res.status(400).json({ error: "Email and password are required." });
+            return res.status(401).json({
+                message: "Required information missing"
+            })
         }
 
         const user = await prisma.user.findUnique({ where: { email } });
 
         if (!user) {
-            return res.status(400).json({ message: "Please enter valid credentials" });
+            return res.status(400).json({
+                message: "User Doesn't exists,Please Register first!!"
+            })
         }
 
-        const passwordValid = await bcrypt.compare(password, user.password);
+        if (await bcrypt.compare(password, user.password)) {
+            const token = jwt.sign(
+                {
+                    id: user.id
+                },
+                process.env.JWT_KEY,
+                {
+                    expiresIn: "1d"
+                }
+            )
 
-        if (!passwordValid) {
-            return res.status(400).json({
+            return res.status(200).json({
+                message: "User Logged  in Successfully",
+                token
+            })
+        } else {
+            return res.status(401).json({
                 message: "Invalid Password"
             })
         }
 
-        const token = jwt.sign(
-            {
-                userId: user.id,
-                email: user.email
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "1d" }
-        );
+    }
+    catch (error) {
+        console.error(error);
 
-        return res.status(200).json({
-            message: "Login Successful",
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email
-            },
-            token
-        })
-    } catch (error) {
-        return res.status(400).json({
-            message: `Some error happens ${error}`
+        return res.status(500).json({
+            message: "Some Unexpected error Occurred"
         })
     }
-
 }
