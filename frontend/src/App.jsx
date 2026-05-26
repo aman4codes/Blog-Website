@@ -1,32 +1,31 @@
-import { BrowserRouter, Routes, Route } from "react-router";
-import SignUp from "./pages/signup";
-import Login from "./pages/login";
+import { Route, Routes, Navigate } from "react-router";
+import PublicRoutes from "./components/publicRoutes.jsx";
+import ProtectedRoutes from "./components/protectedRoutes";
+import { publicRoutes, protectedRoutes } from "./routes.jsx";
 
 function App() {
   return (
-    <BrowserRouter>
+    <div className="min-h-screen min-w-screen border-2 border-black">
       <Routes>
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/"
-          element={
-            <div className="p-8">
-              <h1>Welcome to the Blog App</h1>
-              <p>
-                <a href="/signup" className="text-(--accent) underline">
-                  Signup
-                </a>{" "}
-                |{" "}
-                <a href="/login" className="text-(--accent) underline">
-                  Login
-                </a>
-              </p>
-            </div>
-          }
-        />
+
+        
+        {publicRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={route.element}
+          />
+        ))}
+
+        {protectedRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={route.element}
+          />
+        ))}
       </Routes>
-    </BrowserRouter>
+    </div>
   );
 }
 
