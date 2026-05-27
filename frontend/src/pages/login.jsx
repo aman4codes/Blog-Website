@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import api from "../api/axios.js";
+import { Oval } from "react-loader-spinner";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -26,10 +27,15 @@ function Login() {
 
       localStorage.setItem("token", data.token);
       console.log(data);
-      navigate("/");
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 5000);
     } catch (error) {
       console.error(error);
-      setError(error.response?.data?.message || "Login failed. Please try again.");
+      setError(
+        error.response?.data?.message || "Login failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -37,18 +43,28 @@ function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
+      <Oval
+        height={80}
+        width={80}
+        color="#4fa94d"
+        visible={loading}
+        ariaLabel="oval-loading"
+        secondaryColor="#4fa94d"
+        strokeWidth={2}
+        strokeWidthSecondary={2}
+      />
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md p-6 border-2 border-blue-400 rounded"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        
+
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
-        
+
         <input
           type="email"
           name="email"

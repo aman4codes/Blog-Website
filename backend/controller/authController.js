@@ -46,10 +46,11 @@ export const signUpUser = async (req, res) => {
         })
     }
     catch (error) {
-        console.error(error);
+        console.error("Signup error:", error);
 
         return res.status(500).json({
-            message: "Some Unexpected error Occurred"
+            message: error.message || "Some Unexpected error Occurred",
+            error: error
         })
     }
 }

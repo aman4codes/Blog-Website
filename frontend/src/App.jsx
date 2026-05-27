@@ -1,19 +1,17 @@
-import { Route, Routes, Navigate } from "react-router";
-import PublicRoutes from "./components/publicRoutes.jsx";
-import ProtectedRoutes from "./components/protectedRoutes";
-import { publicRoutes, protectedRoutes } from "./routes.jsx";
+import { Route, Routes } from "react-router-dom";
+import PublicRoutes from "./routes/publicRoutes.jsx";
+import ProtectedRoutes from "./routes/protectedRoutes.jsx";
+import { publicRoutes, protectedRoutes } from "./routes/routes.jsx";
 
 function App() {
   return (
     <div className="min-h-screen min-w-screen border-2 border-black">
       <Routes>
-
-        
         {publicRoutes.map((route) => (
           <Route
             key={route.path}
             path={route.path}
-            element={route.element}
+            element={<PublicRoutes>{route.element}</PublicRoutes>}
           />
         ))}
 
@@ -21,7 +19,7 @@ function App() {
           <Route
             key={route.path}
             path={route.path}
-            element={route.element}
+            element={<ProtectedRoutes>{route.element}</ProtectedRoutes>}
           />
         ))}
       </Routes>
