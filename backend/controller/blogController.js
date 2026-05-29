@@ -37,6 +37,34 @@ export const createBlog = async (req, res) => {
     }
 };
 
+export const allUserBlog = async (req, res) => {
+    try {
+
+        const blogs = await prisma.blog.findMany({
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
+                }
+            }
+        });
+
+        return res.status(200).json({
+            success: true,
+            blogs
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
 export const getUserBlogs = async (req, res) => {
     try {
         const userId = req.user.id;

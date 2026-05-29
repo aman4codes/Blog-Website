@@ -1,11 +1,17 @@
+import Dashboard from "../pages/dashboard";
+import Home from "../pages/homePage";
 import Login from "../pages/login";
 import Signup from "../pages/signup";
 
 export const protectedRoutes = [
-    // {
-    //     path : "/blogs",
-    //     element : <Blogs/>
-    // }
+    {
+        path : "/home",
+        element : <Home/>
+    },
+    {
+        path : "/dashboard",
+        element : <Dashboard/>
+    }
 ];
 
 export const publicRoutes = [

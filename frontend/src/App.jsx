@@ -5,7 +5,7 @@ import { publicRoutes, protectedRoutes } from "./routes/routes.jsx";
 
 function App() {
   return (
-    <div className="min-h-screen min-w-screen border-2 border-black">
+    <div className="min-h-screen border-2 border-pink-500">
       <Routes>
         {publicRoutes.map((route) => (
           <Route
