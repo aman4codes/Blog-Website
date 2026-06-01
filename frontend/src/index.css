@@ -1,12 +1,119 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 
-html, body, #root {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
+:root {
+  --primary: #8c6ddb;
+  --accent: #d4af37;
+  --accent-soft: #f7e1a4;
+  --bg-light: #f8f2e8;
+  --bg-card: rgba(255, 255, 255, 0.90);
+  --bg-panel: rgba(255, 255, 255, 0.96);
+  --bg-panel-soft: rgba(255, 255, 255, 0.82);
+  --text-main: #1c1a16;
+  --text-muted: #7b6d4c;
+  --border: rgba(212, 175, 55, 0.18);
 }
 
 body {
-  background-color: rgb(236, 171, 171);
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Outfit', sans-serif;
+}
+
+.bg-royal {
+  background: radial-gradient(circle at top, rgba(212, 175, 55, 0.14), transparent 24%),
+    linear-gradient(180deg, #f6efe1 0%, #ebdfc8 100%);
+}
+
+.bg-panel {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.bg-panel-soft {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.text-muted-royal {
+  color: var(--text-muted);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #f5d17a 0%, #d4af37 40%, #8c6ddb 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-premium {
+  background: linear-gradient(135deg, #d4af37 0%, #b88728 60%, #8c6ddb 100%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -10px rgba(212, 175, 55, 0.6);
+  opacity: 0.95;
+}
+
+.card-hover {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+}
+
+.input-modern {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(212, 175, 55, 0.24);
+  color: #1c1a16;
+  padding: 0.875rem 1.25rem;
+  border-radius: 0.75rem;
+  width: 100%;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.input-modern:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 1);
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
 }

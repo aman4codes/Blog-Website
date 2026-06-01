@@ -55,6 +55,40 @@ export const signUpUser = async (req, res) => {
     }
 }
 
+export const getUserInfo = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+
+        const user = await prisma.user.findUnique({
+            where: { id: Number(userId) },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+            }
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user
+        });
+    } catch (error) {
+        console.error("Get user info error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Unable to fetch user info"
+        });
+    }
+}
+
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
